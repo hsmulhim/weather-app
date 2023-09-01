@@ -1,4 +1,6 @@
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:weather_app/Service/weather_service.dart';
+import 'package:weather_app/model/weather_model.dart';
 
 subabaseConfing() async {
   await Supabase.initialize(
@@ -12,6 +14,25 @@ Future getCity() async {
   final List cityList =
       await Supabase.instance.client.from("city").select("city_name");
   return cityList;
+}
+
+Future<List<String>?> getCitiesNames() async {
+  final supabase = Supabase.instance.client;
+  final List citiesJson = await supabase.from('city').select();
+  final List<String> cities = [];
+  for (final city in citiesJson) {
+    cities.add(city["city_name"]);
+  }
+  return cities;
+}
+
+Future<List<Weather>?> getCities() async {
+  final List<String>? citiesName = await getCitiesNames();
+  final List<Weather>? cities = [];
+  for (final cityName in citiesName!) {
+    cities!.add(await getWeatherData(cityName));
+  }
+  return cities;
 }
 
 Future addCity(String city_name) async {

@@ -7,19 +7,16 @@ import 'package:weather_app/model/weather_model.dart';
 class WeatherScreen extends StatelessWidget {
   WeatherScreen({super.key});
 
-  WeatherService weatherService = WeatherService();
-
   Weather weather = Weather();
   TextEditingController city = TextEditingController();
 
   Future<Weather> getWeather(String cityName) async {
-    Weather weather = await weatherService.getWeatherData(cityName);
+    Weather weather = await getWeatherData(cityName);
     return weather;
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       body: SafeArea(
         child: Column(

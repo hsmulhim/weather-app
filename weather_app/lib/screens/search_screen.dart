@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/Service/supabseApi.dart';
 import 'package:weather_app/componets/search_appbar_component.dart';
 import 'package:weather_app/componets/search_bar_component.dart';
 import 'package:weather_app/componets/weather_card_component.dart';
-import 'package:weather_app/constants/spacings.dart';
-import 'package:weather_app/extensions/screen_size.dart';
+
+import 'package:weather_app/model/weather_model.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -31,20 +32,27 @@ class _SearchScreenState extends State<SearchScreen> {
           children: [
             SearchBarComponent(SearchEdintController: SearchEdintController),
             Expanded(
-              child: ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 5,
-                  itemBuilder: (context, indext) {
-                    return WeatherCardComponent(
-                      bgMColor: Colors.yellow[600],
-                      cityName: 'London',
-                      imgUrl:
-                          'https://icon-library.com/images/sunny-weather-icon/sunny-weather-icon-13.jpg',
-                      status: 'the weather is cloudy',
-                      temp: '23',
-                      isDay: true,
-                    );
-                  }),
+              child: FutureBuilder(
+                future: getCities(),
+                builder: (context, snapshot) {
+                  List<Weather> cities = snapshot.data!;
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: cities.length,
+                      itemBuilder: (context, index) {
+                        Weather city = cities[index];
+                        return WeatherCardComponent(
+                          bgMColor: Colors.yellow[600],
+                          cityName: city.location!.name!,
+                          imgUrl:
+                              'https://icon-library.com/images/sunny-weather-icon/sunny-weather-icon-13.jpg',
+                          status: city.current!.condition!.text!,
+                          temp: city.current!.tempC.toString()!,
+                          isDay: true,
+                        );
+                      });
+                },
+              ),
             ),
           ],
         ),
@@ -52,5 +60,3 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 }
-
-// this is the weather card

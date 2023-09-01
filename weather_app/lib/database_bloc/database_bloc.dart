@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:weather_app/Service/supabseApi.dart';
-import 'package:weather_app/model/weather_model.dart';
 
 part 'database_event.dart';
 part 'database_state.dart';

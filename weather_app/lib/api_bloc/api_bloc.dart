@@ -12,8 +12,7 @@ class ApiBloc extends Bloc<ApiEvent, ApiState> {
       emit(GetCityLoadingState());
 
       try {
-        final Weather weather =
-            await WeatherService().getWeatherData(event.citysApi);
+        final Weather weather = await getWeatherData(event.citysApi);
 
         emit(SearchApiCityState(weather));
       } catch (e) {
