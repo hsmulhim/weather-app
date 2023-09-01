@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_app/Service/weather_service.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 import 'package:weather_app/api_bloc/api_bloc.dart';
-import 'package:weather_app/model/weather_model.dart';
 
 class WeatherScreen extends StatelessWidget {
   WeatherScreen({super.key});
 
-  Weather weather = Weather();
   TextEditingController city = TextEditingController();
 
-  Future<Weather> getWeather(String cityName) async {
-    Weather weather = await getWeatherData(cityName);
-    return weather;
+  Future<List<String>> getCitySuggestions(String query) async {
+    final suggestions = <String>[];
+
+    final suggestionUri = Uri.parse(
+      "http://api.weatherapi.com/v1/search.json?key=7788ba5739b1435f9a171734233108&q=" +
+          query,
+    );
+
+    try {
+      final response = await http.get(suggestionUri);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body) as List<dynamic>;
+        suggestions.addAll(data.map((item) => item['name'].toString()));
+      }
+    } catch (e) {
+      print('Error fetching city suggestions: $e');
+    }
+
+    return suggestions;
   }
 
   @override
@@ -21,8 +39,22 @@ class WeatherScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            TextField(
-              controller: city,
+            TypeAheadField<String>(
+              textFieldConfiguration: TextFieldConfiguration(
+                controller: city,
+                decoration: InputDecoration(labelText: 'Enter City'),
+              ),
+              suggestionsCallback: (pattern) async {
+                return await getCitySuggestions(pattern);
+              },
+              itemBuilder: (context, suggestion) {
+                return ListTile(
+                  title: Text(suggestion),
+                );
+              },
+              onSuggestionSelected: (suggestion) {
+                context.read<ApiBloc>().add(SearchCityEvent(suggestion));
+              },
             ),
             ElevatedButton(
               onPressed: () async {
