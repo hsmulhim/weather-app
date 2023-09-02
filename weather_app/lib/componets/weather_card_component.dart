@@ -3,14 +3,15 @@ import 'package:weather_app/constants/spacings.dart';
 import 'package:weather_app/extensions/screen_size.dart';
 
 class WeatherCardComponent extends StatelessWidget {
-  const WeatherCardComponent({
+  WeatherCardComponent({
     super.key,
     required this.cityName,
     required this.status,
     required this.temp,
-    required this.imgUrl,
-    this.bgMColor = Colors.yellow,
-    this.bgNColor = Colors.blue,
+    this.imgUrl =
+        "https://cdn.discordapp.com/attachments/1143925062072799385/1146719757068927027/mostlysunny3x.png",
+    this.bgMColor = const Color.fromARGB(255, 152, 224, 250),
+    this.bgNColor = const Color.fromARGB(255, 20, 97, 159),
     required this.isDay,
   });
 
@@ -19,11 +20,30 @@ class WeatherCardComponent extends StatelessWidget {
   final String cityName;
   final String status;
   final String temp;
-  final String imgUrl;
-  final bool isDay;
+  String imgUrl;
+  final int isDay;
+
+  fun() {
+    if (isDay == 1 && status == "Clear") {
+      imgUrl =
+          'https://cdn.discordapp.com/attachments/1143925062072799385/1146719295255101530/sunny3x.png';
+    } else if (isDay == 1 && status == "Partly cloudy") {
+      imgUrl =
+          'https://cdn.discordapp.com/attachments/1143925062072799385/1146719757068927027/mostlysunny3x.png';
+    } else if (isDay != 1 && status == "Clear") {
+      imgUrl =
+          'https://cdn.discordapp.com/attachments/1143925062072799385/1146720229922181170/nt_mostlycloudy3x.png';
+    } else if (isDay != 1 && status == "Partly cloudy") {
+      imgUrl =
+          'https://cdn.discordapp.com/attachments/1143925062072799385/1146719910089740370/nt_tstorms3x.png';
+    }
+
+    return imgUrl;
+  }
 
   @override
   Widget build(BuildContext context) {
+    fun();
     return Container(
       clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.all(8),
@@ -31,7 +51,7 @@ class WeatherCardComponent extends StatelessWidget {
       width: context.getWidth() - 50,
       decoration: BoxDecoration(
         boxShadow: kElevationToShadow[4],
-        color: isDay ? bgMColor : bgNColor,
+        color: isDay == 1 ? bgMColor : bgNColor,
         borderRadius: BorderRadius.circular(20),
       ),
       child: Padding(
@@ -75,6 +95,9 @@ class WeatherCardComponent extends StatelessWidget {
             Spacer(),
             Image.network(
               imgUrl,
+              // isDay != 1
+              //     ? "https://cdn.discordapp.com/attachments/1143925062072799385/1146720229922181170/nt_mostlycloudy3x.png"
+              //     : "https://icon-library.com/images/sunny-weather-icon/sunny-weather-icon-13.jpg",
               height: context.getHeight() * 0.17,
               width: context.getWidth() * 0.4,
             ),
