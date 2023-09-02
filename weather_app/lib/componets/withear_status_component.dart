@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class WithearStatusComponent extends StatelessWidget {
   const WithearStatusComponent({
     super.key,
-     required this.windKph,
-      required this.humidity,
-      required this.cloud,
+    required this.windKph,
+    required this.humidity,
+    required this.cloud,
   });
   final String windKph;
   final String humidity;
@@ -38,8 +38,8 @@ class WithearStatusComponent extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                     Text(
-                     "$windKph",
+                    Text(
+                      "$windKph",
                       style: const TextStyle(color: Colors.white),
                     ),
                     const SizedBox(
@@ -61,7 +61,7 @@ class WithearStatusComponent extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                     Text(
+                    Text(
                       "$cloud",
                       style: const TextStyle(color: Colors.white),
                     ),
@@ -84,7 +84,7 @@ class WithearStatusComponent extends StatelessWidget {
                     const SizedBox(
                       height: 5,
                     ),
-                     Text(
+                    Text(
                       "$humidity",
                       style: const TextStyle(color: Colors.white),
                     ),
