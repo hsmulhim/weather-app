@@ -1,40 +1,43 @@
 import 'package:flutter/material.dart';
+import 'package:weather_app/Screens/search_screen.dart';
+import 'package:weather_app/Service/supabseApi.dart';
 import 'package:weather_app/componets/withear_status_component.dart';
 
 class ViewDetailsStackComponent extends StatelessWidget {
-  ViewDetailsStackComponent(
-      {super.key,
-      required this.cityName,
-      required this.status,
-      required this.temp,
-      this.imgUrl =
-          "https://cdn.discordapp.com/attachments/1143925062072799385/1146719295255101530/sunny3x.png",
-      required this.isDay,
-      required this.localtime});
+  ViewDetailsStackComponent({
+    super.key,
+    required this.cityName,
+    required this.status,
+    required this.temp,
+    required this.isDay,
+    required this.localtime,
+    this.iconUrl =
+        "https://cdn.discordapp.com/attachments/1143925062072799385/1146719295255101530/sunny3x.png",
+  });
 
   final String cityName;
   final String status;
   final String temp;
-  String imgUrl;
   final int isDay;
   final String localtime;
+  String iconUrl;
 
   fun() {
     if (isDay == 1 && status == "Clear") {
-      imgUrl =
+      iconUrl =
           'https://cdn.discordapp.com/attachments/1143925062072799385/1146719295255101530/sunny3x.png';
     } else if (isDay == 1 && status == "Partly cloudy") {
-      imgUrl =
+      iconUrl =
           'https://cdn.discordapp.com/attachments/1143925062072799385/1146719757068927027/mostlysunny3x.png';
     } else if (isDay != 1 && status == "Clear") {
-      imgUrl =
+      iconUrl =
           'https://cdn.discordapp.com/attachments/1143925062072799385/1146720229922181170/nt_mostlycloudy3x.png';
     } else if (isDay != 1 && status == "Partly cloudy") {
-      imgUrl =
+      iconUrl =
           'https://cdn.discordapp.com/attachments/1143925062072799385/1146719910089740370/nt_tstorms3x.png';
     }
 
-    return imgUrl;
+    return iconUrl;
   }
 
   @override
@@ -46,7 +49,47 @@ class ViewDetailsStackComponent extends StatelessWidget {
       child: Stack(
         children: [
           Positioned(
-            top: 10,
+            top: 70,
+            left: 10,
+            child: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Positioned(
+            top: 70,
+            left: 270,
+            child: Row(
+              children: [
+                Text(
+                  "Add City",
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => SearchScreen(),
+                      ),
+                    );
+                  },
+                  icon: const Icon(
+                    Icons.add,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Positioned(
+            top: 150,
             left: 80,
             child: SizedBox(
                 height: 120,
@@ -89,17 +132,17 @@ class ViewDetailsStackComponent extends StatelessWidget {
                 )),
           ),
           Positioned(
-            top: 130,
+            top: 200,
             left: 80,
             child: Image.network(
-              imgUrl,
+              iconUrl,
               height: 250,
               width: 250,
             ),
           ),
           Positioned(
-              top: 380,
-              left: 90,
+              top: 410,
+              left: 130,
               child: Text(
                 "$localtime",
                 style: const TextStyle(

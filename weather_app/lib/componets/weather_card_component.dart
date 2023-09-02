@@ -107,7 +107,7 @@ class WeatherCardComponent extends StatelessWidget {
             Image.network(
               imgUrl,
               height: context.getHeight() * 0.17,
-              width: context.getWidth() * 0.4,
+              width: context.getWidth() * 0.3,
             ),
           ]),
         ),

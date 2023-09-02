@@ -7,35 +7,48 @@ import '../model/weather_model.dart';
 
 class ViewPage extends StatelessWidget {
   ViewPage({super.key, required this.weather});
+
   final Weather weather;
+  String imgUrl =
+      "https://i.pinimg.com/originals/9e/79/26/9e79266ee52e0b55b6e191d45e856d13.gif";
+
+  fun() {
+    int isDay = weather.current?.isDay ?? 0;
+    String status = weather.current?.condition!.text ?? 'Clear';
+
+    if (isDay == 1 && status == "Clear") {
+      imgUrl =
+          'https://i.pinimg.com/originals/9e/79/26/9e79266ee52e0b55b6e191d45e856d13.gif';
+    } else if (isDay == 1 && status == "Partly cloudy") {
+      imgUrl = 'https://i.gifer.com/Lx0q.gif';
+    } else if (isDay != 1 && status == "Clear") {
+      imgUrl = 'https://media.tenor.com/uB8rQEtcJDYAAAAC/weather-time.gif';
+    } else if (isDay != 1 && status == "Partly cloudy") {
+      imgUrl = 'https://media.tenor.com/GUAQb8zhXJgAAAAC/rain-rainy-day.gif';
+    }
+
+    return imgUrl;
+  }
+
   @override
   Widget build(BuildContext context) {
+    fun();
     return Scaffold(
-      backgroundColor: weather.current!.isDay == 1
-          ? Color.fromARGB(255, 152, 224, 250)
-          : Color.fromARGB(255, 20, 97, 159),
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: weather.current!.isDay == 1
-            ? Color.fromARGB(255, 152, 224, 250)
-            : Color.fromARGB(255, 20, 97, 159),
-        actions: [
-          IconButton(
-              onPressed: () {
-                addCity(weather.location?.name ?? 'no city to add');
-              },
-              icon: const Icon(Icons.add))
-        ],
-      ),
-      body: SizedBox(
-        height: 800,
-        width: 600,
+      body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: NetworkImage(
+              imgUrl,
+            ),
+            fit: BoxFit.cover,
+          ),
+        ),
+        height: double.infinity,
+        width: double.infinity,
         child: Column(
           children: [
             ViewDetailsStackComponent(
                 cityName: weather.location?.name ?? 'no name ',
-                imgUrl:
-                    'https://icon-library.com/images/sunny-weather-icon/sunny-weather-icon-13.jpg',
                 isDay: weather.current?.isDay ?? 0,
                 status: weather.current?.condition?.text ?? 'no con',
                 temp: weather.current?.tempC?.toString() ?? 'no temp',
