@@ -1,13 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:http/http.dart' as http;
-import 'package:weather_app/Screens/view_page.dart';
 import 'dart:convert';
 
-import 'package:weather_app/api_bloc/api_bloc.dart';
-import 'package:weather_app/extensions/screen_size.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
 import 'package:weather_app/model/weather_model.dart';
+
+import '../Screens/view_page.dart';
+import '../Service/weather_service.dart';
 
 class SearchComponet extends StatelessWidget {
   @override
@@ -32,7 +31,7 @@ class SearchComponet extends StatelessWidget {
       } catch (e) {
         print('Error fetching city suggestions: $e');
       }
-
+      print("hi$suggestions");
       return suggestions;
     }
 
@@ -51,19 +50,7 @@ class SearchComponet extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: IconButton(
-                  onPressed: () {
-                    // enter the function here
-
-                    // showModalBottomSheet(
-                    //     context: context,
-                    //     builder: (BuildContext context) {
-                    //       return Container(
-                    //         height: context.getHeight(),
-                    //         width: context.getWidth(),
-                    //         decoration: BoxDecoration(color: Colors.amber),
-                    //       );
-                    //     });
-                  },
+                  onPressed: () async {},
                   icon: Icon(
                     Icons.search,
                     color: Colors.black,
@@ -80,8 +67,17 @@ class SearchComponet extends StatelessWidget {
               title: Text(suggestion),
             );
           },
-          onSuggestionSelected: (suggestion) {
-            context.read<ApiBloc>().add(SearchCityEvent(suggestion));
+          onSuggestionSelected: (suggestion) async {
+            final Weather weather = await getWeatherData(suggestion);
+            print('Selected suggestion: ${suggestion.runtimeType}');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewPage(
+                  weather: weather,
+                ),
+              ),
+            );
           },
         ),
       ],

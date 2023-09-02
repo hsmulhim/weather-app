@@ -3,6 +3,7 @@ import 'package:weather_app/Service/supabseApi.dart';
 import 'package:weather_app/componets/search_appbar_component.dart';
 import 'package:weather_app/componets/search_componet.dart';
 import 'package:weather_app/componets/weather_card_component.dart';
+
 import 'package:weather_app/model/weather_model.dart';
 
 class SearchScreen extends StatefulWidget {
