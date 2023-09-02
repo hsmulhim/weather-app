@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:weather_app/Service/supabseApi.dart';
 import 'package:weather_app/componets/search_appbar_component.dart';
-import 'package:weather_app/componets/search_bar_component.dart';
+import 'package:weather_app/componets/search_componet.dart';
 import 'package:weather_app/componets/weather_card_component.dart';
-
 import 'package:weather_app/model/weather_model.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -15,7 +14,6 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   TextEditingController SearchEdintController = TextEditingController();
-
   bool isMorning = false;
 
   @override
@@ -32,13 +30,22 @@ class _SearchScreenState extends State<SearchScreen> {
         bottom: false,
         child: Column(
           children: [
-            SearchBarComponent(SearchEdintController: SearchEdintController),
+            SearchComponet(),
             Expanded(
               child: FutureBuilder(
                 future: getCities(),
                 builder: (context, snapshot) {
-                  List<Weather> cities = snapshot.data!;
-                  return ListView.builder(
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Center(
+                      child: Text('حدث خطأ: ${snapshot.error}'),
+                    );
+                  } else {
+                    List<Weather> cities = snapshot.data!;
+                    return ListView.builder(
                       shrinkWrap: true,
                       itemCount: cities.length,
                       itemBuilder: (context, index) {
@@ -48,13 +55,14 @@ class _SearchScreenState extends State<SearchScreen> {
 
                         return WeatherCardComponent(
                           isDay: value!,
-                          //bgMColor: Colors.yellow[600],
                           cityName: city.location!.name!,
-
                           status: city.current!.condition!.text!,
-                          temp: city.current!.tempC.toString()!,
+                          temp: city.current!.tempC.toString(),
+                          weather: cities[index],
                         );
-                      });
+                      },
+                    );
+                  }
                 },
               ),
             ),

@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:weather_app/constants/spacings.dart';
 import 'package:weather_app/extensions/screen_size.dart';
 
+import '../Screens/view_page.dart';
+import '../model/weather_model.dart';
+
 class WeatherCardComponent extends StatelessWidget {
   WeatherCardComponent({
     super.key,
@@ -13,6 +16,7 @@ class WeatherCardComponent extends StatelessWidget {
     this.bgMColor = const Color.fromARGB(255, 152, 224, 250),
     this.bgNColor = const Color.fromARGB(255, 20, 97, 159),
     required this.isDay,
+    required this.weather,
   });
 
   final Color? bgMColor;
@@ -22,7 +26,7 @@ class WeatherCardComponent extends StatelessWidget {
   final String temp;
   String imgUrl;
   final int isDay;
-
+  final Weather weather;
   fun() {
     if (isDay == 1 && status == "Clear") {
       imgUrl =
@@ -44,20 +48,27 @@ class WeatherCardComponent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     fun();
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      margin: EdgeInsets.all(8),
-      height: context.getHeight() * 0.18,
-      width: context.getWidth() - 50,
-      decoration: BoxDecoration(
-        boxShadow: kElevationToShadow[4],
-        color: isDay == 1 ? bgMColor : bgNColor,
-        borderRadius: BorderRadius.circular(20),
+    return InkWell(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewPage(
+                  weather: weather,
+                )),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: Row(
-          children: [
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        margin: EdgeInsets.all(8),
+        height: context.getHeight() * 0.18,
+        width: context.getWidth() - 50,
+        decoration: BoxDecoration(
+          boxShadow: kElevationToShadow[4],
+          color: isDay == 1 ? bgMColor : bgNColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Row(children: [
             Padding(
               padding: const EdgeInsets.only(left: 8),
               child: Column(
@@ -95,13 +106,10 @@ class WeatherCardComponent extends StatelessWidget {
             Spacer(),
             Image.network(
               imgUrl,
-              // isDay != 1
-              //     ? "https://cdn.discordapp.com/attachments/1143925062072799385/1146720229922181170/nt_mostlycloudy3x.png"
-              //     : "https://icon-library.com/images/sunny-weather-icon/sunny-weather-icon-13.jpg",
               height: context.getHeight() * 0.17,
               width: context.getWidth() * 0.4,
             ),
-          ],
+          ]),
         ),
       ),
     );
