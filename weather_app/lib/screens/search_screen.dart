@@ -14,8 +14,12 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  TextEditingController SearchEdintController = TextEditingController();
+  bool isMorning = false;
+
   @override
   void dispose() {
+    SearchEdintController.dispose();
     super.dispose();
   }
 
@@ -47,14 +51,14 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemCount: cities.length,
                       itemBuilder: (context, index) {
                         Weather city = cities[index];
+
+                        var value = city.current!.isDay;
+
                         return WeatherCardComponent(
-                          bgMColor: Colors.yellow[600],
+                          isDay: value!,
                           cityName: city.location!.name!,
-                          imgUrl:
-                              'https://icon-library.com/images/sunny-weather-icon/sunny-weather-icon-13.jpg',
                           status: city.current!.condition!.text!,
                           temp: city.current!.tempC.toString(),
-                          isDay: true,
                           weather: cities[index],
                         );
                       },

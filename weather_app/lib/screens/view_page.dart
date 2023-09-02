@@ -11,10 +11,14 @@ class ViewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0Xff60B4E2),
+      backgroundColor: weather.current!.isDay == 1
+          ? Color.fromARGB(255, 152, 224, 250)
+          : Color.fromARGB(255, 20, 97, 159),
       appBar: AppBar(
         elevation: 0,
-        backgroundColor: const Color(0Xff60B4E2),
+        backgroundColor: weather.current!.isDay == 1
+            ? Color.fromARGB(255, 152, 224, 250)
+            : Color.fromARGB(255, 20, 97, 159),
         actions: [
           IconButton(
               onPressed: () {

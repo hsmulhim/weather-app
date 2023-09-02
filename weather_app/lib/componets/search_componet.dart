@@ -1,10 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:weather_app/api_bloc/api_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
+import 'package:weather_app/model/weather_model.dart';
+
+import '../Screens/view_page.dart';
+import '../Service/weather_service.dart';
 
 class SearchComponet extends StatelessWidget {
   @override
@@ -29,7 +31,7 @@ class SearchComponet extends StatelessWidget {
       } catch (e) {
         print('Error fetching city suggestions: $e');
       }
-
+      print("hi$suggestions");
       return suggestions;
     }
 
@@ -65,8 +67,17 @@ class SearchComponet extends StatelessWidget {
               title: Text(suggestion),
             );
           },
-          onSuggestionSelected: (suggestion) {
-            context.read<ApiBloc>().add(SearchCityEvent(suggestion));
+          onSuggestionSelected: (suggestion) async {
+            final Weather weather = await getWeatherData(suggestion);
+            print('Selected suggestion: ${suggestion.runtimeType}');
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ViewPage(
+                  weather: weather,
+                ),
+              ),
+            );
           },
         ),
       ],
