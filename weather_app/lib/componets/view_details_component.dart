@@ -53,7 +53,6 @@ class ViewDetailsStackComponent extends StatelessWidget {
             left: 10,
             child: IconButton(
               onPressed: () {
-                addCity(cityName ?? "no city to add");
                 Navigator.pop(context);
               },
               icon: Icon(
@@ -73,6 +72,7 @@ class ViewDetailsStackComponent extends StatelessWidget {
                 ),
                 IconButton(
                   onPressed: () {
+                    addCity(cityName ?? "no city to add");
                     Navigator.pop(context);
 
                     Navigator.of(context).pushReplacement(
