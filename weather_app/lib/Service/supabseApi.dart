@@ -41,3 +41,12 @@ Future addCity(String city_name) async {
       .insert({"city_name": city_name});
   return cityList;
 }
+
+
+Future removeCity(String cityname) async {
+  final cityList = await Supabase.instance.client
+      .from("city")
+      .delete()
+      .match({'city_name': cityname});
+  return cityList;
+}
