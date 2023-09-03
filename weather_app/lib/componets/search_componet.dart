@@ -31,7 +31,6 @@ class SearchComponet extends StatelessWidget {
       } catch (e) {
         print('Error fetching city suggestions: $e');
       }
-      print("hi$suggestions");
       return suggestions;
     }
 
